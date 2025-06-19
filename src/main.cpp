@@ -12,6 +12,7 @@
 static const char DEFAULT_LANG[] = "zh-CN";
 static const int SERVER_PORT = 8889;
 
+// https://patorjk.com/software/taag/#p=testall&f=ANSI%20Regular&t=WORDAUTO
 static const char ASCII_ART[] = "\n\
 _ _ _ _____ _____ ____  _____ _____ _____ _____ \n\
 | | | |     | __  |    \\|  _  |  |  |_   _|     |\n\

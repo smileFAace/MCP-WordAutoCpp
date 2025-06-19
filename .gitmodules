@@ -1,0 +1,3 @@
+[submodule "extlib/minidocx"]
+	path = extlib/minidocx
+	url = https://github.com/smileFAace/minidocx.git
