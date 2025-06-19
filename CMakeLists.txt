@@ -38,7 +38,7 @@ endif()
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON) # for compile_commands.json for clangd
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # Set compiler paths (can be overridden by user)

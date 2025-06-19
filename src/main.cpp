@@ -3,6 +3,8 @@
 #include "i18n.h"                  // Include the i18n header
 // Include the precompiled header last among project headers
 #include "main.h"
+#include "minidocx.hpp"
+
 
 #include <algorithm>  // for std::reverse
 #include <filesystem> // Required for path operations
