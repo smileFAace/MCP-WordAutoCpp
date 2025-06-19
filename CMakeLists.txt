@@ -46,7 +46,7 @@ if(NOT CMAKE_CXX_COMPILER)
     set(CMAKE_CXX_COMPILER "") # Placeholder for C++ compiler path
 endif()
 if(NOT CMAKE_C_COMPILER)
-    set(CMAKE_C_COMPILER "") # Placeholder for C compiler path
+    set(CMAKE_C_COMPILER "E:\\tools\\develop\\w64devkit\\bin\\gcc.exe") # Placeholder for C compiler path
 endif()
 message(STATUS "C compiler: ${CMAKE_C_COMPILER}")
 message(STATUS "C++ compiler: ${CMAKE_CXX_COMPILER}")
@@ -88,7 +88,10 @@ endif()
 add_subdirectory(extlib/spdlog)
 target_include_directories(${PROJECT_NAME} PRIVATE extlib/spdlog/include) # Add spdlog includes
 target_link_libraries(${PROJECT_NAME} PRIVATE spdlog)
-
+# minidocx
+add_subdirectory(extlib/minidocx)
+target_include_directories(${PROJECT_NAME} PRIVATE extlib/minidocx/include/minidocx) 
+target_link_libraries(${PROJECT_NAME} PRIVATE minidocx)
 # -------- Copy Resources --------
 # Copy the lang directory to the executable output directory after build
 #add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
