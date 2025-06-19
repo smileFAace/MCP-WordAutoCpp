@@ -14,10 +14,10 @@ static const int SERVER_PORT = 8889;
 
 static const char ASCII_ART[] = "\n\
 _ _ _ _____ _____ ____  _____ _____ _____ _____ \n\
-| | | |     | __  |    \|  _  |  |  |_   _|     |\n\
+| | | |     | __  |    \\|  _  |  |  |_   _|     |\n\
 | | | |  |  |    -|  |  |     |  |  | | | |  |  |\n\
 |_____|_____|__|__|____/|__|__|_____| |_| |_____|\n\                                        
-v0.0.1                 By smileFAace\n";
+v0.0.1                              By smileFAace\n";
 
 std::string g_current_excel_file_path;
 
