@@ -121,6 +121,145 @@ static void s_i18n_init()
     spdlog::info("Current language set to: {}", i18n.getCurrentLanguage());
 }
 
+//call this funciton to test the abilities of minidox
+void minidocx_testfield()
+{
+    using namespace md;
+    try
+    {
+        Document doc;
+        doc.prop_.author_ = "Cline";
+        doc.prop_.title_ = "MiniDocx Comprehensive Test";
+
+        // 1. Section and Page Setup
+        SectionPointer sect = doc.addSection();
+        sect->prop_.landscape_ = true;
+
+        // 2. Styled Paragraph (Heading)
+        ParagraphStyle heading_style;
+        heading_style.name_ = "My Heading Style";
+        heading_style.align_ = Alignment::Centered;
+        heading_style.fontSize_ = 24;
+        heading_style.color_ = "FF0000";
+        // bold is a character property, not a paragraph style property.
+        // We will apply it to the RichText later if needed.
+        doc.addParagraphStyle(heading_style);
+
+        ParagraphPointer heading_para = sect->addParagraph();
+        heading_para->prop_.style_ = "My Heading Style";
+        RichTextPointer heading_text = heading_para->addRichText("Comprehensive Test for minidocx");
+        heading_text->prop_.fontStyle_.bold_ = true;
+
+
+        // 3. Normal Paragraph
+        sect->addParagraph()->addRichText(
+            "This document serves as a comprehensive test for the minidocx library, "
+            "covering various features such as text formatting, images, tables, and lists.");
+
+        // 4. Formatted Text (RichText)
+        ParagraphPointer p_formatted = sect->addParagraph();
+        p_formatted->addRichText("This paragraph contains ");
+
+        RichTextPointer bold_text = p_formatted->addRichText("bold");
+        bold_text->prop_.fontStyle_.bold_ = true;
+
+        p_formatted->addRichText(", ");
+
+        RichTextPointer italic_text = p_formatted->addRichText("italic");
+        italic_text->prop_.fontStyle_.italic_ = true;
+
+        p_formatted->addRichText(", and ");
+
+        RichTextPointer underlined_text = p_formatted->addRichText("underlined");
+        underlined_text->prop_.underline_.style_ = RichTextProperties::UnderlineStyle::Single;
+
+        p_formatted->addRichText(" text.");
+
+        // 5. Image
+        try {
+            ParagraphPointer pic_para = sect->addParagraph();
+            pic_para->prop_.align_ = Alignment::Centered;
+            PicturePointer pict = pic_para->addPicture(doc.addImage("extlib/minidocx/assets/logo.png"));
+            pict->prop_.extent_.setSize(128, 128, 96, 100);
+        } catch (const Exception& ex) {
+            spdlog::warn("Could not add image to test document: {}. (Is the path correct?)", ex.what());
+        }
+
+
+        // 6. Table
+        ParagraphPointer table_title = sect->addParagraph();
+        table_title->addRichText("Here is a table:");
+        table_title->prop_.spacing_ = ParagraphProperties::Spacing();
+        table_title->prop_.spacing_->before_.type_ = ParagraphProperties::SpacingType::Absolute;
+        table_title->prop_.spacing_->before_.value_ = 400;
+
+        TablePointer table = sect->addTable(3, 4);
+        table->prop_.width_.type_ = TableProperties::WidthType::Percent;
+        table->prop_.width_.value_ = 80 * 50; // 80%
+
+        for (int r = 0; r < 3; ++r) {
+            for (int c = 0; c < 4; ++c) {
+                CellPointer cell = table->cellAt(r, c);
+                cell->addParagraph()->addRichText("Row " + std::to_string(r + 1) + ", Col " + std::to_string(c + 1));
+                // Cannot set cell properties directly, this feature might be missing.
+            }
+        }
+
+        // 7. Numbered List
+        ParagraphPointer num_list_title = sect->addParagraph();
+        num_list_title->addRichText("This is a numbered list:");
+        num_list_title->prop_.spacing_ = ParagraphProperties::Spacing();
+        num_list_title->prop_.spacing_->before_.type_ = ParagraphProperties::SpacingType::Absolute;
+        num_list_title->prop_.spacing_->before_.value_ = 400;
+
+        NumberingId num_id = doc.addNumberedListDefinition();
+        ParagraphPointer item1 = sect->addParagraph();
+        item1->addRichText("First item");
+        item1->prop_.numId_ = num_id;
+        item1->prop_.numLevel_ = 0;
+
+        ParagraphPointer item2 = sect->addParagraph();
+        item2->addRichText("Second item");
+        item2->prop_.numId_ = num_id;
+        item2->prop_.numLevel_ = 0;
+
+        ParagraphPointer sub_item = sect->addParagraph();
+        sub_item->addRichText("Sub-item A");
+        sub_item->prop_.numId_ = num_id;
+        sub_item->prop_.numLevel_ = 1;
+
+        // 8. Bulleted List
+        ParagraphPointer bullet_list_title = sect->addParagraph();
+        bullet_list_title->addRichText("And a bulleted list:");
+        bullet_list_title->prop_.spacing_ = ParagraphProperties::Spacing();
+        bullet_list_title->prop_.spacing_->before_.type_ = ParagraphProperties::SpacingType::Absolute;
+        bullet_list_title->prop_.spacing_->before_.value_ = 400;
+
+        NumberingId bullet_id = doc.addBulletedListDefinition();
+        ParagraphPointer bullet1 = sect->addParagraph();
+        bullet1->addRichText("Apple");
+        bullet1->prop_.numId_ = bullet_id;
+        bullet1->prop_.numLevel_ = 0;
+
+        ParagraphPointer bullet2 = sect->addParagraph();
+        bullet2->addRichText("Orange");
+        bullet2->prop_.numId_ = bullet_id;
+        bullet2->prop_.numLevel_ = 0;
+
+        ParagraphPointer bullet3 = sect->addParagraph();
+        bullet3->addRichText("Banana");
+        bullet3->prop_.numId_ = bullet_id;
+        bullet3->prop_.numLevel_ = 0;
+
+        doc.saveAs("bin/comprehensive_test.docx");
+        spdlog::info("Successfully created comprehensive_test.docx in bin/ directory.");
+    }
+    catch (const std::exception& ex)
+    {
+        spdlog::error("Failed to create comprehensive test docx: {}", ex.what());
+    }
+}
+
 int main()
 {
 #ifdef _WIN32
@@ -133,6 +272,9 @@ int main()
     s_spdlog_init();
 
     s_i18n_init();
+
+    minidocx_testfield();
+
 
     mcp::server server("localhost", SERVER_PORT);
     mcp::set_log_level(mcp::log_level::error); // Keep MCP library logs concise
